@@ -2,8 +2,8 @@ import { first, get, isEmpty, isNil, isString, last, toNumber } from "lodash";
 import slugify from "slugify";
 import { Id, StrapiContext } from "strapi-typed";
 import { validate } from "uuid";
-import { ContentTypeEntity, IAdminService, IClientService, ICommonService, Navigation, NavigationItem, NavigationItemEntity, NestedStructure, RFRNavItem, ToBeFixed } from "../../types"
-import { composeItemTitle, extractMeta, filterByPath, filterOutUnpublished, getPluginService, templateNameFactory } from "../utils";
+import { ContentTypeEntity, IAdminService, IClientService, ICommonService, Navigation, NavigationItem, NavigationItemEntity, NestedStructure, RenderType, RFRNavItem, ToBeFixed } from "../../types"
+import { composeItemTitle, getPluginModels, filterByPath, filterOutUnpublished, getPluginService, templateNameFactory } from "../utils";
 //@ts-ignore
 import { errors } from '@strapi/utils';
 import { i18nAwareEntityReadHandler } from "../i18n";
@@ -211,9 +211,7 @@ const clientService: (context: StrapiContext) => IClientService = ({ strapi }) =
       visible: true,
     }
 
-    const { masterModel, itemModel } = extractMeta(
-      strapi.plugins,
-    );
+    const { masterModel, itemModel } = getPluginModels();
 
     const entity = await i18nAwareEntityReadHandler({
       entity: await strapi

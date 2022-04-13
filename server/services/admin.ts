@@ -1,8 +1,28 @@
 import slugify from "slugify";
 import { isNil, isObject } from "lodash";
 import { Id, StrapiContext } from "strapi-typed";
-import { Audience, AuditLogContext, IAdminService, ICommonService, Navigation, NavigationItemEntity, NavigationPluginConfig, ToBeFixed } from "../../types";
-import { ADDITIONAL_FIELDS, ALLOWED_CONTENT_TYPES, buildNestedStructure, CONTENT_TYPES_NAME_FIELDS_DEFAULTS, DEFAULT_POPULATE, extractMeta, getPluginService, prepareAuditLog, RESTRICTED_CONTENT_TYPES, sendAuditLog } from "../utils";
+import {
+  Audience,
+  AuditLogContext,
+  IAdminService,
+  ICommonService,
+  Navigation,
+  NavigationItemEntity,
+  NavigationPluginConfig,
+  ToBeFixed
+} from "../../types";
+import {
+  ADDITIONAL_FIELDS,
+  ALLOWED_CONTENT_TYPES,
+  buildNestedStructure,
+  CONTENT_TYPES_NAME_FIELDS_DEFAULTS,
+  DEFAULT_POPULATE,
+  getPluginModels
+  getPluginService,
+  prepareAuditLog,
+  RESTRICTED_CONTENT_TYPES,
+  sendAuditLog,
+} from "../utils";
 import { addI18NConfigFields, I18NConfigFields } from "../i18n";
 
 type SettingsPageConfig = NavigationPluginConfig & I18NConfigFields
@@ -10,9 +30,9 @@ type SettingsPageConfig = NavigationPluginConfig & I18NConfigFields
 const adminService: (context: StrapiContext) => IAdminService = ({ strapi }) => ({
   async config(viaSettingsPage = false): Promise<SettingsPageConfig> {
     const commonService = getPluginService<ICommonService>('common');
-    const { audienceModel } = extractMeta(strapi.plugins);
+    const { audienceModel } = getPluginModels();
     const pluginStore = await commonService.getPluginStore()
-    const config: NavigationPluginConfig = await pluginStore.get({ key: 'config' });
+    const config = await pluginStore.get<string, NavigationPluginConfig>({ key: 'config' });
 
     const additionalFields = config.additionalFields;
     const contentTypesNameFields = config.contentTypesNameFields;
@@ -62,7 +82,7 @@ const adminService: (context: StrapiContext) => IAdminService = ({ strapi }) => 
   },
 
   async get(): Promise<Navigation[]> {
-    const { masterModel } = extractMeta(strapi.plugins);
+    const { masterModel } = getPluginModels();
     const entities = await strapi
       .query<Navigation>(masterModel.uid)
       .findMany({
@@ -75,7 +95,7 @@ const adminService: (context: StrapiContext) => IAdminService = ({ strapi }) => 
   async getById(id: Id): Promise<Navigation> {
     const commonService = getPluginService<ICommonService>('common');
 
-    const { masterModel, itemModel } = extractMeta(strapi.plugins);
+    const { masterModel, itemModel } = getPluginModels();
     const entity = await strapi
       .query<Navigation>(masterModel.uid)
       .findOne({ where: { id }, populate: DEFAULT_POPULATE });
@@ -101,7 +121,7 @@ const adminService: (context: StrapiContext) => IAdminService = ({ strapi }) => 
     const commonService = getPluginService<ICommonService>('common');
     const adminService = getPluginService<IAdminService>('admin');
 
-    const { masterModel } = extractMeta(strapi.plugins);
+    const { masterModel } = getPluginModels();
     const { name, visible } = payload;
     const data = {
       name,
@@ -130,7 +150,7 @@ const adminService: (context: StrapiContext) => IAdminService = ({ strapi }) => 
     const adminService = getPluginService<IAdminService>('admin');
     const commonService = getPluginService<ICommonService>('common');
 
-    const { masterModel } = extractMeta(strapi.plugins);
+    const { masterModel } = getPluginModels();
     const { name, visible } = payload;
 
     const existingEntity = await adminService.getById(id);
