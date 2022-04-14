@@ -560,7 +560,7 @@ query {
         "path": "/another",
         "related": {
           "__typename": "Page",
-          "Title": "dfdfdf"
+          "Title": "Eg. Page title"
         },
         "items": []
       }
