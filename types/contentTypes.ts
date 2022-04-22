@@ -86,3 +86,11 @@ type EntityDatePartial = {
   createdAt: DateString;
   updatedAt: DateString;
 }
+
+export type NavigationItemCustomField = {
+  name: string;
+  label: string;
+  type: 'string' | 'boolean';
+}
+
+export type NavigationItemAdditionalField = NavigationItemCustomField | 'audience';

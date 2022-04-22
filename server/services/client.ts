@@ -2,7 +2,7 @@ import { first, get, isEmpty, isNil, isString, last, toNumber } from "lodash";
 import slugify from "slugify";
 import { Id, StrapiContext } from "strapi-typed";
 import { validate } from "uuid";
-import { ContentTypeEntity, IAdminService, IClientService, ICommonService, Navigation, NavigationItem, NavigationItemEntity, NestedStructure, RenderType, RFRNavItem, ToBeFixed } from "../../types"
+import { ContentTypeEntity, IAdminService, IClientService, ICommonService, Navigation, NavigationItem, NavigationItemEntity, NestedStructure, RFRNavItem, ToBeFixed } from "../../types"
 import { composeItemTitle, getPluginModels, filterByPath, filterOutUnpublished, getPluginService, templateNameFactory } from "../utils";
 //@ts-ignore
 import { errors } from '@strapi/utils';
